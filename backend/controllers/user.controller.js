@@ -1,4 +1,6 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -30,14 +32,14 @@ export const registerController = async (req, res) => {
     const token = jwt.sign(
       { id: newUser._id, name: newUser.name, email: newUser.email },
       process.env.JWTSECRET,
-      {
-        httpOnly: true,
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: "None",
-      }
+      { expiresIn: "24h" }
     );
-    res.cookie("token", token, { expiresIn: "24h" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "None",
+    });
     newUser.save();
     res.status(201).json({
       message: "User registered successfully",
@@ -54,9 +56,9 @@ export const registerController = async (req, res) => {
 };
 
 export const loginController = async (req, res) => {
-  const { name, email } = req.body;
+  const { email, password } = req.body;
   try {
-    if (!name || !email) {
+    if (!email || !password) {
       return res.status(400).json({
         message: "All fields are required!",
         success: false,
@@ -81,14 +83,14 @@ export const loginController = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email },
       process.env.JWTSECRET,
-      {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-      }
+      { expiresIn: "24h" }
     );
-    res.cookie("token", token, { expiresIn: "24h" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
       message: "User loggedIn successfully",
       success: true,
@@ -98,6 +100,55 @@ export const loginController = async (req, res) => {
     console.log("Error logging the user: ", error);
     return res.status(500).json({
       message: "Error logging the user",
+      success: false,
+    });
+  }
+};
+
+export const logoutController = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
+      message: "User logged out successfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error logging out!",
+      success: false,
+    });
+  }
+};
+
+export const profileController = async (req, res) => {
+  try {
+    const id = req.userId;
+    if (!id) {
+      return res.status(401).json({
+        message: "Please login!",
+        success: false,
+      });
+    }
+    const loggedInUser = await User.findById(id).select("-password");
+    if (!loggedInUser) {
+      return res.status(401).json({
+        message: "Please login!",
+        success: false,
+      });
+    }
+    res.status(200).json({
+      message: "User profile fetched successfully",
+      success: true,
+      loggedInUser,
+    });
+  } catch (error) {
+    return res.status(401).json({
+      message: "Please login!",
       success: false,
     });
   }

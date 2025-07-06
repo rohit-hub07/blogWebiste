@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const db = async () => {
   await mongoose
-    .connect("mongodb://127.0.0.1/blogWebsite")
+    .connect(process.env.MONGO_URL)
     .then(() => {
       console.log("Connected to the database!");
     })
