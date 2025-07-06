@@ -14,6 +14,7 @@ export const isAuthenticated = async (req,res, next) => {
     const decoded = jwt.verify(token, process.env.JWTSECRET);
     console.log("Decoded value: ", decoded);
     req.userId = decoded.id;
+    console.log("req.userid: ", req.userId);
     next();
   } catch (error) {
     console.log("Error authenticating the user: ", error);
