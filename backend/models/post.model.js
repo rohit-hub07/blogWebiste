@@ -21,7 +21,7 @@ const postSchema = new mongoose.Schema(
     readTime: Number,
     status: {
       type: String,
-      enum: ["pending", "approve", "reject"],
+      enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
   },
