@@ -3,8 +3,14 @@ import Post from "../models/post.model.js";
 export const getPendingPostController = async (req, res) => {
   try {
     const allPosts = await Post.find({ status: "pending" });
+    if (allPosts.length === 0) {
+      return res.status(404).json({
+        message: "No pending blogs!",
+        success: false,
+      });
+    }
     res.status(200).json({
-      message: "Pendind blogs fetchedd successfully!",
+      message: "Pendind blogs fetched successfully!",
       success: true,
       allPosts,
     });

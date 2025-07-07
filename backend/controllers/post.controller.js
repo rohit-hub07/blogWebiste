@@ -170,3 +170,24 @@ export const deletePostController = async (req, res) => {
     });
   }
 };
+
+export const rejectedPost = async (req, res) => {
+  try {
+    const post = await Post.find({ status: "rejected" });
+    if (post.length === 0) {
+      return res.status().json({
+        message: "No rejected blogs!",
+        success: false,
+      });
+    }
+    res.status(200).json({
+      message: "Rejected Blogs fetched successfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong!",
+      success: false,
+    });
+  }
+};

@@ -4,9 +4,11 @@ import {
   getPendingPostController,
   rejectBlogController,
 } from "../controllers/admin.controller.js";
+import { isAdmin } from "../middleware/isAdmin.middle.js";
+import { isAuthenticated } from "../middleware/auth.middleware.js";
 const adminRouter = express.Router();
 
-adminRouter.get("/posts", getPendingPostController);
-adminRouter.put("/posts/:id/approve", approveBlogController);
-adminRouter.put("/posts/:id/reject", rejectBlogController);
+adminRouter.get("/posts",isAuthenticated, isAdmin, getPendingPostController);
+adminRouter.put("/posts/:id/approve",isAuthenticated, isAdmin, approveBlogController);
+adminRouter.put("/posts/:id/reject",isAuthenticated, isAdmin, rejectBlogController);
 export default adminRouter;

@@ -6,6 +6,7 @@ import { db } from "./utils/db.js";
 import userRouter from "./routes/user.routes.js";
 import postRouter from "./routes/post.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/auth", userRouter);
 app.use("/posts", postRouter);
 app.use("/admin", adminRouter);
+app.use("/category", categoryRouter);
 
 app.listen(port, () => {
   console.log(`App is listen to port: ${port}`);
