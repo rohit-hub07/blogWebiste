@@ -4,19 +4,21 @@ import {
   editPostController,
   getAllPostsController,
   getPostByIdController,
+  rejectedBlog,
   uploadBlogController,
 } from "../controllers/post.controller.js";
 import { isAuthenticated } from "../middleware/auth.middleware.js";
 import { isOwner } from "../middleware/isOwner.middleware.js";
-import { rejectBlogController } from "../controllers/admin.controller.js";
+
 
 const postRouter = express.Router();
 
+postRouter.get("/rejected-blogs",isAuthenticated,rejectedBlog);
 postRouter.post("/", isAuthenticated, uploadBlogController);
 postRouter.get("/", getAllPostsController);
 postRouter.get("/:id", getPostByIdController);
 postRouter.put("/:id", isAuthenticated, isOwner, editPostController);
 postRouter.delete("/:id", isAuthenticated, isOwner, deletePostController);
-postRouter.get("/rejected-blogs",isAuthenticated,isOwner,rejectBlogController);
+
 
 export default postRouter;
