@@ -3,6 +3,7 @@ import { getLoggedInUser } from "../utils/getLoggedInUser.js";
 
 export const uploadBlogController = async (req, res) => {
   const { title, content, tags, coverImage, readTime } = req.body;
+  console.log("coverImage: ", coverImage);
   try {
     if (!title || !content || !coverImage || !readTime) {
       return res.status(400).json({

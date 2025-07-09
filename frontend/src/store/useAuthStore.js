@@ -7,6 +7,8 @@ export const useAuthStore = create((set) => ({
   isUserLoading: "false",
   isSigningUp: false,
   isLogging: false,
+  isLoggingOut: false,
+  isProfileLoading: false,
 
   registerUser: async (data) => {
     set({ isSigningUp: true });
@@ -31,6 +33,31 @@ export const useAuthStore = create((set) => ({
       toast.error("Error logging the user!");
     } finally {
       set({ isLogging: false });
+    }
+  },
+
+  logout: async () => {
+    set({ isLoggingOut: true });
+    try {
+      const res = await axiosInstance.get("/auth/logout");
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error logging out the user!");
+    } finally {
+      set({ isLoggingOut: false });
+    }
+  },
+
+  profile: async () => {
+    set({ isProfileLoading: true });
+    try {
+      const res = await axiosInstance.get("/auth/me");
+      set({ authUser: res.data.loggedInUser });
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error getting user profile!");
+    } finally{
+      set({isProfileLoading: false});
     }
   },
 }));

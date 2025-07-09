@@ -17,7 +17,11 @@ const postSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
-    coverImage: String,
+    coverImage: {
+      type: String,
+      default: "https://cdn-icons-png.flaticon.com/512/1326/1326377.png",
+      set: v => (v === '' ? undefined : v),
+    },
     readTime: Number,
     status: {
       type: String,

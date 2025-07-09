@@ -36,9 +36,9 @@ export const registerController = async (req, res) => {
     );
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "None",
+      sameSite: "strict",
     });
     newUser.save();
     res.status(201).json({
@@ -87,8 +87,8 @@ export const loginController = async (req, res) => {
     );
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      sameSite: "strict",
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -109,8 +109,8 @@ export const logoutController = async (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      sameSite: "strict",
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
