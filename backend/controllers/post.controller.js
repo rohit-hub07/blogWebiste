@@ -1,4 +1,5 @@
 import Post from "../models/post.model.js";
+import User from "../models/user.model.js";
 import { getLoggedInUser } from "../utils/getLoggedInUser.js";
 
 export const uploadBlogController = async (req, res) => {
@@ -21,7 +22,7 @@ export const uploadBlogController = async (req, res) => {
       tags,
       coverImage,
       readTime,
-    });
+    }).populate("author");
     if (!post) {
       return res.status(500).json({
         message: "Something went wrong!",
@@ -174,15 +175,58 @@ export const deletePostController = async (req, res) => {
 
 export const rejectedBlog = async (req, res) => {
   try {
-    const posts = await Post.find({ status: "rejected" });
+    const id = req.userId;
+    const user = await User.findById(id);
+    if (user.role === "admin") {
+      const posts = await Post.find({ status: "rejected" }).populate("author");
+      if (posts.length === 0) {
+        return res.status(404).json({
+          message: "No rejected blogs!",
+          success: false,
+        });
+      }
+      res.status(200).json({
+        message: "Rejected Blogs fetched successfully",
+        success: true,
+        posts,
+      });
+    } else {
+      const posts = await Post.find(
+        { author: id , status: "rejected" }
+      ).populate("author");
+      if (posts.length === 0) {
+        return res.status(404).json({
+          message: "No rejected blogs!",
+          success: false,
+        });
+      }
+      res.status(200).json({
+        message: "Rejected Blogs fetched successfully",
+        success: true,
+        posts,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong!",
+      success: false,
+    });
+  }
+};
+
+export const approved = async (req, res) => {
+  try {
+    const posts = await Post.find({ status: "approved" }).populate(
+      "author"
+    );
     if (posts.length === 0) {
       return res.status(404).json({
-        message: "No rejected blogs!",
+        message: "No approved blogs!",
         success: false,
       });
     }
     res.status(200).json({
-      message: "Rejected Blogs fetched successfully",
+      message: "Approved Blogs fetched successfully",
       success: true,
       posts,
     });
@@ -191,5 +235,78 @@ export const rejectedBlog = async (req, res) => {
       message: "Something went wrong!",
       success: false,
     });
+  }
+};
+
+// export const pendingBlog = async (req, res) => {
+//   try {
+//     const id = req.userId;
+//     const user = await User.findById(id);
+//     console.log("User inside of pending blog: ", user)
+//     if (user.role === "admin") {
+//       const posts = await Post.find({ status: "pending" }).populate("author");
+//       console.log("Inside of pendingBlogcontroller: ",posts);
+//       if (posts.length === 0) {
+//         return res.status(404).json({
+//           message: "No pending blogs!",
+//           success: false,
+//         });
+//       }
+//       res.status(200).json({
+//         message: "Pending Blogs fetched successfully",
+//         success: true,
+//         posts,
+//       });
+//     } else {
+//       const posts = await Post.find(
+//         { auhtor: id },
+//         { status: "pending" }
+//       ).populate("author");
+//       console.log("Inside of pendingBlog controller: ",posts);
+//       if (posts.length === 0) {
+//         return res.status(404).json({
+//           message: "No pending blogs!",
+//           success: false,
+//         });
+//       }
+//       res.status(200).json({
+//         message: "Pending Blogs fetched successfully",
+//         success: true,
+//         posts,
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({
+//       message: "Something went wrong!",
+//       success: false,
+//     });
+//   }
+// };
+
+export const pendingBlog = async (req, res) => {
+  try {
+    const id = req.userId;
+    const user = await User.findById(id).lean();
+    if (!user) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+
+    console.log("User:", user._id, "role:", user.role);
+    const filter = user.role === "admin"
+      ? { status: "pending" }
+      : { author: id, status: "pending" };
+
+    console.log("Finding posts with filter:", filter);
+    const posts = await Post.find(filter).populate("author");
+
+    console.log("Posts found:", posts);
+    if (!posts.length) {
+      return res.status(404).json({ message: "No pending blogs!", success: false });
+    }
+
+    res.status(200).json({ message: "Pending Blogs fetched successfully", success: true, posts });
+  } catch (error) {
+    console.error("Error in pendingBlog:", error);
+    res.status(500).json({ message: "Something went wrong!", success: false });
   }
 };

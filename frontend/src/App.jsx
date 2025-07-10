@@ -8,21 +8,29 @@ import { useAuthStore } from "./store/useAuthStore";
 import HomePage from "./pages/HomePage";
 import { useEffect } from "react";
 import BlogDetailPage from "./pages/BlogDetailPage";
+import PendingBlogPage from "./components/PendingBlog";
+import ReviewPage from "./pages/ReviewPage";
 
 function App() {
-
-  const { profile,authUser } = useAuthStore();
+  const { profile, authUser } = useAuthStore();
 
   useEffect(() => {
     profile();
-  },[profile])
+  }, [profile]);
   return (
     <>
       <Toaster />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={authUser? <HomePage /> : <Navigate to={"/auth/login"} />} />
+          <Route
+            path="/"
+            element={authUser ? <HomePage /> : <Navigate to={"/auth/login"} />}
+          />
+
           <Route path="/posts/:id" element={<BlogDetailPage />} />
+
+          {/* <Route path="/posts/pending-blogs" element={<PendingBlogPage />} /> */}
+          <Route path="/posts/pending-blogs" element={<ReviewPage />} />
         </Route>
         <Route
           path="/auth/login"

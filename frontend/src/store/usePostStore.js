@@ -10,6 +10,10 @@ export const usePostStore = create((set) => ({
   isPostsLoading: false,
   isRejectedPostLoading: false,
   rejectedPosts: [],
+  pendingPosts: [],
+  isPendingPostLoading: false,
+  approvedBlogs: [],
+  isApproveBlogLoading: false,
 
   getAllPosts: async () => {
     set({ isPostsLoading: true });
@@ -27,7 +31,7 @@ export const usePostStore = create((set) => ({
   getPostById: async (id) => {
     set({ isPostLoading: true });
     try {
-      console.log("id inside of usePostStore: ",id)
+      console.log("id inside of usePostStore: ", id);
       const res = await axiosInstance.get(`/posts/${id}`);
       set({ post: res.data.post });
       toast.success(res.data.message);
@@ -67,7 +71,7 @@ export const usePostStore = create((set) => ({
     }
   },
 
-  rejectedPosts: async () => {
+  getRejectedPosts: async () => {
     set({ isRejectedPostLoading: true });
     try {
       const res = await axiosInstance.get("/posts/rejected-blogs");
@@ -77,6 +81,50 @@ export const usePostStore = create((set) => ({
       toast.error("Error fetching the data");
     } finally {
       set({ isRejectedPostLoading: false });
+    }
+  },
+
+  getPendingPosts: async () => {
+    set({ isPendingPostLoading: true });
+    try {
+      const res = await axiosInstance.get("/posts/pending-blogs");
+      set({ pendingPosts: res.data.posts });
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error getting pending blogs!");
+    } finally {
+      set({ isPendingPostLoading: false });
+    }
+  },
+
+  approvedPosts: async () => {
+    set({ isApproveBlogLoading: true });
+    try {
+      const res = await axiosInstance.get("/posts/approved-blogs");
+      set({ approvedBlogs: res.data.posts });
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error getting approved blogs!");
+    } finally {
+      set({ isApproveBlogLoading: false });
+    }
+  },
+
+  rejectPostById: async (id) => {
+    try {
+      const res = await axiosInstance.put(`/admin/posts/${id}/reject`);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error rejecting the blog!");
+    }
+  },
+
+  approvePostById: async (id) => {
+    try {
+      const res = await axiosInstance.put(`/admin/posts/${id}/approve`);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error approving the blog!");
     }
   },
 }));

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Edit, Bell, Menu, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Search, Edit, Bell, Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,23 +18,42 @@ const Navbar = () => {
               <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-lg">h</span>
               </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">hashnode</span>
+              <a
+                href="/"
+                className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors"
+              >
+                <span className="ml-2 text-xl font-bold text-gray-900">
+                  hashnode
+                </span>
+              </a>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">
+            <a
+              href="#"
+              className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors"
+            >
               Home
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">
-              Community
+            <a
+              href="/auth/logout"
+              className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors"
+            >
+              <button>Logout</button>
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">
+            <a
+              href="#"
+              className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors"
+            >
               Products
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">
-              Resources
+            <a
+              href="/posts/pending-blogs"
+              className="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors"
+            >
+              Pending Blogs
             </a>
           </div>
 
@@ -74,7 +93,11 @@ const Navbar = () => {
               onClick={toggleMenu}
               className="text-gray-600 hover:text-blue-600 p-2"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -84,20 +107,32 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a href="#" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">
+            <a
+              href="#"
+              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
               Home
             </a>
-            <a href="#" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">
+            <a
+              href="#"
+              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
               Community
             </a>
-            <a href="#" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">
+            <a
+              href="#"
+              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
               Products
             </a>
-            <a href="#" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">
-              Resources
+            <a
+              href="/posts/pending-blogs"
+              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
+              Pending blogs
             </a>
           </div>
-          
+
           {/* Mobile Search */}
           <div className="px-4 py-3 border-t border-gray-200">
             <div className="relative">

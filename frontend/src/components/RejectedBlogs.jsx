@@ -1,27 +1,35 @@
 import React, { useEffect } from "react";
 import { usePostStore } from "../store/usePostStore";
-import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, LocationEdit, MessageCircle } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const RejectedBlog = () => {
   // const { authUser } = useAuthStore();
-  const { approvedBlogs, isApproveBlogLoading, approvedPosts } = usePostStore();
+  // const navigate = useNavigate();
+  const {
+    rejectedPosts,
+    isRejectedPostLoading,
+    getRejectedPosts,
+  } = usePostStore();
 
   useEffect(() => {
-    approvedPosts();
+    getRejectedPosts();
   }, []);
 
-  if (isApproveBlogLoading) return <h1>Loading Posts!</h1>;
+  if (isRejectedPostLoading)
+    return <h1 className="text-center mt-10">Loading Posts!</h1>;
+
 
   return (
     <div className="p-4 space-y-6 max-w-3xl mx-auto">
-      {approvedBlogs.length == 0 ? (
+      {rejectedPosts.length === 0 ? (
         <div className="text-center text-gray-500 mt-10">
-          No pending posts available.
+          No Rejected posts available.
         </div>
       ) : (
-        approvedBlogs.map((p) => (
+        rejectedPosts.map((p) => (
           <div
             key={p._id}
             className="flex justify-between items-start border-b pb-4"
@@ -34,7 +42,7 @@ const HomePage = () => {
                   className="w-8 h-8 rounded-full object-cover"
                 />
                 <span className="text-sm font-semibold text-gray-700">
-                  {p.author.name}
+                  {p.authorName}
                 </span>
                 <span className="text-xs text-gray-400">
                   {new Date(p.createdAt).toLocaleDateString("en-GB", {
@@ -51,14 +59,28 @@ const HomePage = () => {
               </Link>
               <div className="mt-2 flex items-center space-x-4 text-gray-500">
                 <div className="flex items-center space-x-1 hover:text-red-500 cursor-pointer">
-                  <Heart className="w-4 h-4" />
-                  <span>Like</span>
+                  <LocationEdit className="w-4 h-4" />
+                  <span>{p.status}</span>
                 </div>
-                <div className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Comment</span>
-                </div>
+                
               </div>
+              {/* Accept / Reject Buttons */}
+              {/* {authUser.role === "admin" ? (
+              <div className="mt-4 flex space-x-2">
+                <button
+                  onClick={() => approvePostFunc(p._id)}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => rejectPostFunc(p._id)}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                >
+                  Reject
+                </button>
+              </div>
+              ) : <></>} */}
             </div>
             {p.coverImage && (
               <img
@@ -67,7 +89,7 @@ const HomePage = () => {
                     ? p.coverImage
                     : `https://cdn-icons-png.flaticon.com/512/1326/1326377.png`
                 }
-                alt={"img"}
+                alt="cover"
                 className="w-44 h-24 object-cover rounded-md flex-shrink-0"
               />
             )}
@@ -78,4 +100,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default RejectedBlog;
