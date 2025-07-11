@@ -21,7 +21,8 @@ const RejectedBlog = () => {
 
   const deletePostFunc = async (id) => {
     await deletePost(id);
-    navigate("/posts/pending-posts");
+    await getRejectedPosts();
+    // navigate("/posts/pending-posts");
   };
 
   return (
@@ -40,11 +41,11 @@ const RejectedBlog = () => {
               <div className="flex items-center space-x-3 mb-1">
                 <img
                   src={p.authorImage}
-                  alt={p.authorName}
+                  alt={p.author.name}
                   className="w-8 h-8 rounded-full object-cover"
                 />
                 <span className="text-sm font-semibold text-gray-700">
-                  {p.authorName}
+                  {p.author.name}
                 </span>
                 <span className="text-xs text-gray-400">
                   {new Date(p.createdAt).toLocaleDateString("en-GB", {

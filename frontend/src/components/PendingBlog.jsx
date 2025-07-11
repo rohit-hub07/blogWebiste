@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { usePostStore } from "../store/usePostStore";
 import { Link } from "react-router-dom";
-import { Heart, LocationEdit, MessageCircle } from "lucide-react";
+import { LocationEdit } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
-import { useNavigate } from "react-router-dom";
-import { get } from "react-hook-form";
 
 const PendingBlogPage = () => {
   const { authUser } = useAuthStore();
-  const navigate = useNavigate();
   const {
     pendingPosts,
     isPendingPostLoading,
@@ -24,17 +21,17 @@ const PendingBlogPage = () => {
   if (isPendingPostLoading)
     return <h1 className="text-center mt-10">Loading Posts!</h1>;
 
-  const rejectPostFunc = async(id) => {
+  const rejectPostFunc = async (id) => {
     await rejectPostById(id);
-    getPendingPosts();
+    await getPendingPosts();
     // navigate("/posts/pending-blogs");
-  }
+  };
 
-  const approvePostFunc = async(id) => {
+  const approvePostFunc = async (id) => {
     await approvePostById(id);
-    getPendingPosts();
+    await getPendingPosts();
     // navigate("/posts/pending-blogs");
-  }
+  };
 
   return (
     <div className="p-4 space-y-6 max-w-3xl mx-auto">
@@ -76,25 +73,26 @@ const PendingBlogPage = () => {
                   <LocationEdit className="w-4 h-4" />
                   <span>{p.status}</span>
                 </div>
-                
               </div>
               {/* Accept / Reject Buttons */}
               {authUser.role === "admin" ? (
-              <div className="mt-4 flex space-x-2">
-                <button
-                  onClick={() => approvePostFunc(p._id)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => rejectPostFunc(p._id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                >
-                  Reject
-                </button>
-              </div>
-              ) : <></>}
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => approvePostFunc(p._id)}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => rejectPostFunc(p._id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Reject
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             {p.coverImage && (
               <img

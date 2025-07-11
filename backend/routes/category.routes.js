@@ -6,6 +6,6 @@ import { isAuthenticated } from "../middleware/auth.middleware.js";
 const categoryRouter = express.Router();
 
 categoryRouter.post("/",isAuthenticated,isAdmin, addCategoryController);
-categoryRouter.get("/",isAuthenticated,isAdmin, getCategoryController);
+categoryRouter.get("/",isAuthenticated, getCategoryController);
 
 export default categoryRouter;

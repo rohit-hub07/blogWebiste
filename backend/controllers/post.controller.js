@@ -143,6 +143,7 @@ export const editPostController = async (req, res) => {
         success: false,
       });
     }
+    post.status = "pending";
     await post.save();
     res.status(200).json({
       message: "Blog updated successfully",

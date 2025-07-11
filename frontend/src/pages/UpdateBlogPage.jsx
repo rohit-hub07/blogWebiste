@@ -79,7 +79,7 @@ const UpdateBlogPage = () => {
     }
   };
 
-  if (!post._id) return <div className="p-6 text-center">Loading post...</div>;
+  if (!post?._id) return <div className="p-6 text-center">Loading post...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50">
