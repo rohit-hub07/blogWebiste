@@ -6,21 +6,23 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 
 const RejectedBlog = () => {
-  // const { authUser } = useAuthStore();
-  // const navigate = useNavigate();
-  const {
-    rejectedPosts,
-    isRejectedPostLoading,
-    getRejectedPosts,
-  } = usePostStore();
+  const { authUser, profile } = useAuthStore();
+  const navigate = useNavigate();
+  const { rejectedPosts, isRejectedPostLoading, getRejectedPosts, deletePost } =
+    usePostStore();
 
   useEffect(() => {
     getRejectedPosts();
+    profile();
   }, []);
 
   if (isRejectedPostLoading)
     return <h1 className="text-center mt-10">Loading Posts!</h1>;
 
+  const deletePostFunc = async (id) => {
+    await deletePost(id);
+    navigate("/posts/pending-posts");
+  };
 
   return (
     <div className="p-4 space-y-6 max-w-3xl mx-auto">
@@ -62,25 +64,29 @@ const RejectedBlog = () => {
                   <LocationEdit className="w-4 h-4" />
                   <span>{p.status}</span>
                 </div>
-                
               </div>
               {/* Accept / Reject Buttons */}
-              {/* {authUser.role === "admin" ? (
-              <div className="mt-4 flex space-x-2">
+              { authUser?.email == p.author.email ? (
+                <>
+                  <div className="mt-4 flex space-x-2">
+                <Link to={`/posts/update/${p._id}`}>
+                  <button
+                    onClick={() => approvePostFunc(p._id)}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                  >
+                    Update Blog
+                  </button>
+                </Link>
                 <button
-                  onClick={() => approvePostFunc(p._id)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => rejectPostFunc(p._id)}
+                  onClick={() => deletePostFunc(p._id)}
                   className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                 >
-                  Reject
+                  Delete
                 </button>
               </div>
-              ) : <></>} */}
+                </>
+              ) : <></>}
+              
             </div>
             {p.coverImage && (
               <img

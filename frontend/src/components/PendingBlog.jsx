@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Heart, LocationEdit, MessageCircle } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import { get } from "react-hook-form";
 
 const PendingBlogPage = () => {
   const { authUser } = useAuthStore();
@@ -18,29 +19,31 @@ const PendingBlogPage = () => {
 
   useEffect(() => {
     getPendingPosts();
-  }, []);
+  }, [getPendingPosts]);
 
   if (isPendingPostLoading)
     return <h1 className="text-center mt-10">Loading Posts!</h1>;
 
   const rejectPostFunc = async(id) => {
     await rejectPostById(id);
-    navigate("/posts/pending-blogs")
+    getPendingPosts();
+    // navigate("/posts/pending-blogs");
   }
 
   const approvePostFunc = async(id) => {
     await approvePostById(id);
-    navigate("/posts/pending-blogs")
+    getPendingPosts();
+    // navigate("/posts/pending-blogs");
   }
 
   return (
     <div className="p-4 space-y-6 max-w-3xl mx-auto">
-      {pendingPosts.length === 0 ? (
+      {pendingPosts?.length === 0 ? (
         <div className="text-center text-gray-500 mt-10">
           No pending posts available.
         </div>
       ) : (
-        pendingPosts.map((p) => (
+        pendingPosts?.map((p) => (
           <div
             key={p._id}
             className="flex justify-between items-start border-b pb-4"

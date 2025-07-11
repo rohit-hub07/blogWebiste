@@ -19,6 +19,7 @@ export const addCategoryController = async (req, res) => {
   res.status(200).json({
     message: "Category added successfully!",
     success: true,
+    category,
   });
 };
 

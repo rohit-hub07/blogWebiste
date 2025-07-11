@@ -14,7 +14,7 @@ export const usePostStore = create((set) => ({
   isPendingPostLoading: false,
   approvedBlogs: [],
   isApproveBlogLoading: false,
-
+  isPostUpdating: false,
   getAllPosts: async () => {
     set({ isPostsLoading: true });
     try {
@@ -48,6 +48,7 @@ export const usePostStore = create((set) => ({
       const res = await axiosInstance.post("/posts", data);
       toast.success(res.data.message);
     } catch (error) {
+      console.log("error inside of uploadPost: ", error.response.data);
       toast.error(error);
     } finally {
       set({ isCreatingPost: false });
@@ -55,18 +56,23 @@ export const usePostStore = create((set) => ({
   },
 
   updatePost: async (id, data) => {
+    set({ isPostUpdating: true });
     try {
       const res = await axiosInstance.put(`/posts/${id}`, data);
       toast.success(res.data.message);
     } catch (error) {
+      console.log("Error while updating posts: ", error.response.data);
       toast.error("Error updating the post!");
+    } finally {
+      set({ isPostUpdating: false });
     }
   },
   deletePost: async (id) => {
     try {
-      const res = await axiosInstance.delete("/posts/:id");
+      const res = await axiosInstance.delete(`/posts/${id}`);
       toast.success(res.data.message);
     } catch (error) {
+      console.log("Error deleting blog: ", error.response.data);
       toast.error("Error deleting the blog!");
     }
   },

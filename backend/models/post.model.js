@@ -22,7 +22,10 @@ const postSchema = new mongoose.Schema(
       default: "https://cdn-icons-png.flaticon.com/512/1326/1326377.png",
       set: v => (v === '' ? undefined : v),
     },
-    readTime: Number,
+    readTime: {
+      type: Number,
+      default: 3,
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

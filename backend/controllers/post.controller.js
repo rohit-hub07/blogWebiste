@@ -3,10 +3,14 @@ import User from "../models/user.model.js";
 import { getLoggedInUser } from "../utils/getLoggedInUser.js";
 
 export const uploadBlogController = async (req, res) => {
-  const { title, content, tags, coverImage, readTime } = req.body;
+  const { title, content, tags, coverImage } = req.body;
+  // console.log("coverImage: ", coverImage);
+  console.log("tile: ", title);
+  console.log("tags: ", tags);
+  // console.log("readTime: ", readTime);
   console.log("coverImage: ", coverImage);
   try {
-    if (!title || !content || !coverImage || !readTime) {
+    if (!title || !content || !coverImage) {
       return res.status(400).json({
         message: "All fields are required!",
         success: false,
@@ -21,8 +25,7 @@ export const uploadBlogController = async (req, res) => {
       author: req.userId,
       tags,
       coverImage,
-      readTime,
-    }).populate("author");
+    });
     if (!post) {
       return res.status(500).json({
         message: "Something went wrong!",
@@ -109,7 +112,7 @@ export const getPostByIdController = async (req, res) => {
 };
 
 export const editPostController = async (req, res) => {
-  const { title, content, tags, coverImage, readTime } = req.body;
+  const { title, content, tags, coverImage } = req.body;
   const { id } = req.params;
   try {
     if (!id) {
@@ -118,7 +121,7 @@ export const editPostController = async (req, res) => {
         success: false,
       });
     }
-    if (!title || !content || !tags || !coverImage || !readTime) {
+    if (!title || !content || !tags || !coverImage) {
       return res.status(400).json({
         message: "All fields are required!",
         success: false,
@@ -132,7 +135,6 @@ export const editPostController = async (req, res) => {
         content,
         tags,
         coverImage,
-        readTime,
       }
     );
     if (!post) {
