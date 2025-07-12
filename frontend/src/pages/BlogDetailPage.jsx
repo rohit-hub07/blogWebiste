@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { usePostStore } from "../store/usePostStore";
 import { LoaderCircle, CalendarDays, Clock, User2, Tag } from "lucide-react";
 import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const BlogDetailPage = () => {
   const { post, isPostLoading, getPostById } = usePostStore();
@@ -51,7 +53,9 @@ const BlogDetailPage = () => {
 
       {/* Content */}
       <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-        {post.content}
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {post.content}
+        </ReactMarkdown>
       </div>
 
       {/* Tags */}

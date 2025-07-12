@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Post from "../models/post.model.js";
 
 export const registerController = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -128,6 +129,7 @@ export const logoutController = async (req, res) => {
 export const profileController = async (req, res) => {
   try {
     const id = req.userId;
+    const posts = await Post.find({author: {_id: id}}).populate("author");
     if (!id) {
       return res.status(401).json({
         message: "Please login!",
@@ -145,6 +147,7 @@ export const profileController = async (req, res) => {
       message: "User profile fetched successfully",
       success: true,
       loggedInUser,
+      posts,
     });
   } catch (error) {
     return res.status(401).json({

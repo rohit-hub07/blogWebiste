@@ -12,6 +12,7 @@ import PendingBlogPage from "./components/PendingBlog";
 import ReviewPage from "./pages/ReviewPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import UpdateBlogPage from "./pages/UpdateBlogPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const { profile, authUser } = useAuthStore();
@@ -36,6 +37,9 @@ function App() {
           <Route path="/posts/create-blog" element={<CreateBlogPage />} />
 
           <Route path="/posts/update/:id" element={<UpdateBlogPage />} />
+
+          <Route path="/auth/profile" element={<ProfilePage />} />
+
         </Route>
         <Route
           path="/auth/login"

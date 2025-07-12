@@ -5,7 +5,7 @@ import RejectedBlog from "../components/RejectedBlogs";
 const ReviewPage = () => {
   return (
     <>
-      <PendingBlogPage />
+      <PendingBlogPage /> 
       <RejectedBlog />
     </>
   );

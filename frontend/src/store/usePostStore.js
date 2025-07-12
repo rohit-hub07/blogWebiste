@@ -15,6 +15,10 @@ export const usePostStore = create((set) => ({
   approvedBlogs: [],
   isApproveBlogLoading: false,
   isPostUpdating: false,
+  searchQuery: "",
+
+  setSearchQuery: (q) => set({ searchQuery: q }),
+
   getAllPosts: async () => {
     set({ isPostsLoading: true });
     try {
@@ -84,7 +88,8 @@ export const usePostStore = create((set) => ({
       set({ rejectedPosts: res.data.posts });
       toast.success(res.data.message);
     } catch (error) {
-      toast.error("Error fetching the data");
+      console.log("Error getting rejectedd blogs!")
+      // toast.error("Error fetching the data");
     } finally {
       set({ isRejectedPostLoading: false });
     }
@@ -97,7 +102,8 @@ export const usePostStore = create((set) => ({
       set({ pendingPosts: res.data.posts });
       toast.success(res.data.message);
     } catch (error) {
-      toast.error("Error getting pending blogs!");
+      console.log("Error getting pending blogs!")
+      // toast.error("Error getting pending blogs!");
     } finally {
       set({ isPendingPostLoading: false });
     }

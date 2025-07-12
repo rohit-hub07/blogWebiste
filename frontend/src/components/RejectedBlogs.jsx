@@ -39,11 +39,11 @@ const RejectedBlog = () => {
           >
             <div className="flex-1 pr-4">
               <div className="flex items-center space-x-3 mb-1">
-                <img
-                  src={p.authorImage}
-                  alt={p.author.name}
-                  className="w-8 h-8 rounded-full object-cover"
-                />
+                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-medium">
+                      {p.author.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
                 <span className="text-sm font-semibold text-gray-700">
                   {p.author.name}
                 </span>

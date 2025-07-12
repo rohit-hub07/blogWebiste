@@ -10,7 +10,7 @@ export const useAuthStore = create((set) => ({
   isLoggingOut: false,
   isProfileLoading: false,
   isLoggedIn: false,
-
+  usePosts: [],
   registerUser: async (data) => {
     set({ isSigningUp: true });
     try {
@@ -28,7 +28,7 @@ export const useAuthStore = create((set) => ({
     set({ isLogging: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
-      set({ authUser: res.data.user, isLoggedIn: true }); // Correctly setting isLoggedIn
+      set({ authUser: res.data.user, isLoggedIn: true });
       toast.success(res.data.message);
     } catch (error) {
       toast.error("Error logging the user!");
@@ -41,7 +41,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoggingOut: true });
     try {
       const res = await axiosInstance.get("/auth/logout");
-      set({ authUser: null, isLoggedIn: false }); // Correctly setting isLoggedIn to false
+      set({ authUser: null, isLoggedIn: false });
       toast.success(res.data.message);
     } catch (error) {
       toast.error("Error logging out the user!");
@@ -54,11 +54,10 @@ export const useAuthStore = create((set) => ({
     set({ isProfileLoading: true });
     try {
       const res = await axiosInstance.get("/auth/me");
-      set({ authUser: res.data.loggedInUser, isLoggedIn: true }); // Crucial change: Set isLoggedIn to true
-      toast.success(res.data.message);
+      set({ authUser: res.data.loggedInUser, isLoggedIn: true, userPosts: res.data.posts });
+      // toast.success(res.data.message);
     } catch (error) {
-      // If profile fails, it means the user is not logged in or the session expired.
-      set({ authUser: null, isLoggedIn: false }); // Ensure isLoggedIn is false
+      set({ authUser: null, isLoggedIn: false }); 
       toast.error("Error getting user profile or session expired!");
     } finally {
       set({ isProfileLoading: false });
