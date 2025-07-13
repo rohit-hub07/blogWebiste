@@ -37,9 +37,9 @@ export const registerController = async (req, res) => {
     );
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production", // false in dev
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "strict",
     });
     newUser.save();
     res.status(201).json({
@@ -88,8 +88,8 @@ export const loginController = async (req, res) => {
     );
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: false,
+      secure: process.env.NODE_ENV === "production", // false in dev
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -110,8 +110,8 @@ export const logoutController = async (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      sameSite: "strict",
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -129,7 +129,7 @@ export const logoutController = async (req, res) => {
 export const profileController = async (req, res) => {
   try {
     const id = req.userId;
-    const posts = await Post.find({author: {_id: id}}).populate("author");
+    const posts = await Post.find({ author: { _id: id } }).populate("author");
     if (!id) {
       return res.status(401).json({
         message: "Please login!",

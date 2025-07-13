@@ -37,6 +37,7 @@ const Navbar = () => {
     logout();
     setIsLoggedIn(false);
     setIsAvatarOpen(false);
+    
   };
 
   return (

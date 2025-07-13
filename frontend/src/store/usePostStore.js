@@ -116,7 +116,7 @@ export const usePostStore = create((set) => ({
       set({ approvedBlogs: res.data.posts });
       toast.success(res.data.message);
     } catch (error) {
-      toast.error("Error getting approved blogs!");
+      // toast.error("Error getting approved blogs!");
     } finally {
       set({ isApproveBlogLoading: false });
     }
