@@ -13,6 +13,7 @@ const app = express();
 const corsOptions = {
   origin: [
     "https://myblogs-backend-91ie.onrender.com",
+    "https://myblogs-backend-91ie.onrender.com/",
     "https://my-blogs-frontend.vercel.app",
     "http://localhost:8000",
     "http://localhost:5173",
@@ -24,6 +25,11 @@ app.use(
   cors(corsOptions)
 );
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.use(cookieParser());
 dotenv.config();
