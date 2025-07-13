@@ -2,6 +2,10 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Post from "../models/post.model.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 export const registerController = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -38,7 +42,7 @@ export const registerController = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // false in dev
-      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     newUser.save();
@@ -89,7 +93,7 @@ export const loginController = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // false in dev
-      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -111,7 +115,7 @@ export const logoutController = async (req, res) => {
     res.cookie("token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({

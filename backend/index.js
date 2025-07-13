@@ -10,12 +10,21 @@ import categoryRouter from "./routes/category.routes.js";
 
 const app = express();
 
+const corsOptions = {
+  origin: [
+    "https://myblogs-backend-91ie.onrender.com",
+    "https://my-blogs-frontend.vercel.app",
+    "http://localhost:8000",
+    "http://localhost:5173",
+  ],
+  credentials: true,
+};
+
 app.use(
-  cors({
-    origin: ["http://localhost:8000","http://localhost:5173"],
-    credentials: true,
-  })
+  cors(corsOptions)
 );
+
+
 app.use(cookieParser());
 dotenv.config();
 app.use(express.json());
