@@ -26,7 +26,7 @@ export const registerController = async (req, res) => {
     }
 
     const newUser = await User.create({ name, email, password, role });
-    console.log("newuser: ", newUser);
+    // console.log("newuser: ", newUser);
 
     if (!newUser) {
       return res.status(500).json({
@@ -52,7 +52,7 @@ export const registerController = async (req, res) => {
       newUser,
     });
   } catch (error) {
-    console.log("Error registering the user: ", error);
+    // console.log("Error registering the user: ", error);
     return res.status(500).json({
       message: "Error registering the user",
       success: false,
@@ -78,7 +78,7 @@ export const loginController = async (req, res) => {
       });
     }
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("isMatch: ", isMatch);
+    // console.log("isMatch: ", isMatch);
     if (!isMatch) {
       return res.status(401).json({
         message: "Email or password is incorrect!",
@@ -102,7 +102,7 @@ export const loginController = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log("Error logging the user: ", error);
+    // console.log("Error logging the user: ", error);
     return res.status(500).json({
       message: "Error logging the user",
       success: false,

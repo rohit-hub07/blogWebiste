@@ -12,7 +12,7 @@ export const isOwner = async (req, res, next) => {
     });
   }
 
-  console.log("User inside of isOwner: ", loggedInuser);
+  // console.log("User inside of isOwner: ", loggedInuser);
   if (loggedInuser._id.toString() !== post.author._id.toString()) {
     return res.status(403).json({
       message: "You do not have access to this resource!",

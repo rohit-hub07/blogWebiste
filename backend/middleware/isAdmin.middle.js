@@ -23,7 +23,7 @@ export const isAdmin = async (req, res, next) => {
       success: false,
     });
   }
-  console.log("currUser inside of admin: ", currUser);
+  // console.log("currUser inside of admin: ", currUser);
   if (currUser.role !== "admin") {
     return res.status(403).json({
       message: "You are not allowed to access this resource!",

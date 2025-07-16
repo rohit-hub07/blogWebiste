@@ -5,10 +5,10 @@ import { getLoggedInUser } from "../utils/getLoggedInUser.js";
 export const uploadBlogController = async (req, res) => {
   const { title, content, tags, coverImage } = req.body;
   // console.log("coverImage: ", coverImage);
-  console.log("tile: ", title);
-  console.log("tags: ", tags);
+  // console.log("tile: ", title);
+  // console.log("tags: ", tags);
   // console.log("readTime: ", readTime);
-  console.log("coverImage: ", coverImage);
+  // console.log("coverImage: ", coverImage);
   try {
     if (!title || !content || !coverImage) {
       return res.status(400).json({
@@ -294,15 +294,15 @@ export const pendingBlog = async (req, res) => {
       return res.status(404).json({ message: "User not found", success: false });
     }
 
-    console.log("User:", user._id, "role:", user.role);
+    // console.log("User:", user._id, "role:", user.role);
     const filter = user.role === "admin"
       ? { status: "pending" }
       : { author: id, status: "pending" };
 
-    console.log("Finding posts with filter:", filter);
+    // console.log("Finding posts with filter:", filter);
     const posts = await Post.find(filter).populate("author");
 
-    console.log("Posts found:", posts);
+    // console.log("Posts found:", posts);
     if (!posts.length) {
       return res.status(404).json({ message: "No pending blogs!", success: false });
     }
