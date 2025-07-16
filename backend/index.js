@@ -7,6 +7,7 @@ import userRouter from "./routes/user.routes.js";
 import postRouter from "./routes/post.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import categoryRouter from "./routes/category.routes.js";
+import commentRouter from "./routes/comment.routes.js";
 
 const app = express();
 
@@ -48,6 +49,8 @@ app.use("/auth", userRouter);
 app.use("/posts", postRouter);
 app.use("/admin", adminRouter);
 app.use("/category", categoryRouter);
+app.use("/comments", commentRouter);
+
 
 app.listen(port, () => {
   console.log(`App is listen to port: ${port}`);
