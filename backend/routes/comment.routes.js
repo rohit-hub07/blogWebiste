@@ -4,11 +4,16 @@ import {
   deleteCommnetController,
   getAllCommentsController,
 } from "../controllers/comment.controller.js";
+import { isAuthenticated } from "../middleware/auth.middleware.js";
 
 const commentRouter = express.Router();
 
 commentRouter.get("/", getAllCommentsController);
-commentRouter.post("/add-comment", addCommentController);
-commentRouter.delete("/delete-comment", deleteCommnetController)
+commentRouter.post("/add-comment/:id",isAuthenticated, addCommentController);
+commentRouter.delete(
+  "/delete-comment/:id",
+  isAuthenticated,
+  deleteCommnetController
+);
 
 export default commentRouter;
