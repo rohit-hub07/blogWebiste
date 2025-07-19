@@ -46,7 +46,7 @@ const BlogInfo = () => {
   const onSubmit = async (data) => {
     try {
       await addComment(id, data);
-      await getAllComments();
+      await getAllComments(id);
       await getPostById(id);
       reset(); // Clear the form
       setIsModalOpen(false);

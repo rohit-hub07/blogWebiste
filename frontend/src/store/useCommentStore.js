@@ -7,10 +7,10 @@ export const useCommentStore = create((set) => ({
   isCommnetLoading: false,
   addedComment: null,
   isCommentAdding: false,
-  getAllComments: async () => {
+  getAllComments: async (id) => {
     set({ isCommnetLoading: true });
     try {
-      const res = await axiosInstance.get("/comments");
+      const res = await axiosInstance.get(`/comments/${id}`);
       set({ comments: res.data.allComments });
       toast.success(res.data.message);
     } catch (error) {

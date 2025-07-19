@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
 import { Loader, User, MessageSquare, Delete } from "lucide-react";
 import { useCommentStore } from "../store/useCommentStore";
+import { useAuthStore } from "../store/useAuthStore";
+import { useParams } from "react-router-dom";
 
 const CommentPage = () => {
   const comments = useCommentStore((state) => state.comments);
   const getAllComments = useCommentStore((state) => state.getAllComments);
   const isCommentLoading = useCommentStore((state) => state.isCommentLoading);
   const deleteComment = useCommentStore((state) => state.deleteComment);
-
+  const authUser = useAuthStore((state) => state.authUser);
+  const {id } = useParams();
   useEffect(() => {
-    getAllComments();
+    getAllComments(id);
   }, [getAllComments]);
 
-  const deleteCommentFunc = async (id) => {
-    await deleteComment(id);
-    getAllComments();
+  const deleteCommentFunc = async (cId) => {
+    await deleteComment(cId);
+    await getAllComments(id);
   };
 
   if (isCommentLoading)
@@ -63,13 +66,17 @@ const CommentPage = () => {
                 </time>
               </div>
             </div>
-            <button
-              onClick={() => deleteCommentFunc(c._id)}
-              className="flex items-center text-red-500 hover:text-red-600 transition-colors"
-              aria-label="Delete comment"
-            >
-              <Delete className="w-5 h-5" />
-            </button>
+            {authUser?._id == c.user._id || authUser?.role == "admin" ? (
+              <button
+                onClick={() => deleteCommentFunc(c._id)}
+                className="flex items-center text-red-500 hover:text-red-600 transition-colors"
+                aria-label="Delete comment"
+              >
+                <Delete className="w-5 h-5" />
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       ))}
