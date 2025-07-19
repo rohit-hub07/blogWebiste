@@ -4,8 +4,13 @@ import User from "../models/user.model.js";
 import { getLoggedInUser } from "../utils/getLoggedInUser.js";
 
 export const getAllCommentsController = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
   try {
-    const allComments = await Comment.find().populate("post").populate("user");
+    const allComments = await Comment.find({post: id})
+      .populate("post")
+      .populate("user");
+    console.log("allComments: ", allComments)
     if (!allComments) {
       return res.status(404).json({
         message: "Comments doesn't exists!",
