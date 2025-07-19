@@ -20,7 +20,7 @@ const postSchema = new mongoose.Schema(
     coverImage: {
       type: String,
       default: "https://cdn-icons-png.flaticon.com/512/1326/1326377.png",
-      set: v => (v === '' ? undefined : v),
+      set: (v) => (v === "" ? undefined : v),
     },
     readTime: {
       type: Number,
@@ -31,6 +31,12 @@ const postSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );
