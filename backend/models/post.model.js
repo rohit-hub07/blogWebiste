@@ -19,8 +19,7 @@ const postSchema = new mongoose.Schema(
     },
     coverImage: {
       type: String,
-      default: "https://cdn-icons-png.flaticon.com/512/1326/1326377.png",
-      set: (v) => (v === "" ? undefined : v),
+      default: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
     },
     readTime: {
       type: Number,
@@ -43,11 +42,12 @@ const postSchema = new mongoose.Schema(
 
 postSchema.pre("save", function (next) {
   if (this.isModified("title") || !this.slug) {
-    this.slug = slugify(this.title, {
+    const baseSlug = slugify(this.title || "post", {
       lower: true,
       strict: true,
       trim: true,
     });
+    this.slug = `${baseSlug}-${Date.now().toString(36)}`;
   }
   next();
 });

@@ -2,17 +2,15 @@ import Post from "../models/post.model.js";
 
 export const getPendingPostController = async (req, res) => {
   try {
-    const allPosts = await Post.find({ status: "pending" });
-    if (allPosts.length === 0) {
-      return res.status(404).json({
-        message: "No pending blogs!",
-        success: false,
-      });
-    }
+    const allPosts = await Post.find({ status: "pending" })
+      .populate("author")
+      .populate("category")
+      .sort({ createdAt: -1 });
+
     res.status(200).json({
-      message: "Pendind blogs fetched successfully!",
+      message: "Pending blogs fetched successfully!",
       success: true,
-      allPosts,
+      allPosts: allPosts || [],
     });
   } catch (error) {
     return res.status(500).json({
@@ -35,7 +33,7 @@ export const approveBlogController = async (req, res) => {
     post.status = "approved";
     await post.save();
     res.status(200).json({
-      message: "Blog approves successfully!",
+      message: "Blog approved successfully!",
       success: true,
       post,
     });
